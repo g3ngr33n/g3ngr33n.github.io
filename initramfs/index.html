@@ -4,14 +4,17 @@
 <title>lightweight initramfs</title>
 <meta charset="utf-8">
 <style>
+#start {
+background-color:#dff9ff;
+}
 code {
 margin: 0;
 padding: 5px;
 border: 0;
 font-size: 100%;
 font: inherit;
-background-color:#dff9ff;
 max-width:200px;
+display:block;
 }
 a {
 text-decoration:none;
@@ -49,7 +52,7 @@ margin:15px 0 35px 0;
    <header>
       <h1>Simple initramfs with luks support</h1>
    </header>
-   <article>
+   <article id=start>
       <code>
       	<span>mkdir /usr/src/initramfs </span>
 	<span> # Basic directories structure</span>
