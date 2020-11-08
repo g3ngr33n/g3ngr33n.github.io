@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>lightweight initramfs</title>
+<meta charset="utf-8">
+<style>
+img {
+  width: 100%;
+  height: auto;
+}
+.net {
+font-weight:bold;
+margin:0;
+padding:8px 0 8px 0;
+}
+.example {
+margin:15px auto 15px auto;
+padding:0;
+}
+.title {
+padding:5px;
+color:green;
+border-style:dashed;
+}
+.subtitle {
+font-size:13px;
+margin:15px 0 0 0;
+display:block;
+}
+.example img {
+border-style:solid;
+margin:15px 0 35px 0;
+}
+</style>
+</head>
+<body>
+   <header>
+      <h1>Simple initramfs with luks support</h1>
+   </header>
+   <article>
+      <code>
+      	<span>mkdir /usr/src/initramfs </span>
+	<span> # Basic directories structure</span>
+	<span>mkdir --parents {bin,dev,etc,lib,mnt,proc,root,sbin,sys,usr} /usr/src/initramfs</span>
+	<span> # Required files</span>
+	<span>cp --archive dev/{console,null,random,tty,urandom,sda,sda1,sda2,sda3} /usr/src/initramfs/dev/</span>
+	<span>cp --parents /proc/sys/kernel/printk /usr/src/initramfs/</span>
+	<span>cp --parents /etc/fstab /usr/src/initramfs/ </span>
+      </code>
+   </article>
+  
+   <article>
+      <h2>Binary / library</h2>
+  	<p>bin/busybox, sbin/cryptsetup, sbin/switch_root and sbin/init</p>
+	<p>For binary non static binary, copy library and simlink related into their respective path</p>
+   </article>
+
+   <article>
+   <h2>Bash script init</h2>
+   <p>A init as simple of <a href="init">init</a> will work</p>
+   <p>Place the init file at the root of the initramfs directory and apply a chmod +x</p>
+   </article>
+
+   <article>
+   <h2>Generate the initramfs</h2>
+   <p>A the root directory of the initramfs directory, execute</p>
+   <code>find . -print0 | cpio --null --create --verbose --format=newc > /boot/initrd-4.19.152.cpio</code>
+   </article>
+
+    <article>
+   <h2>Extra</h2>
+   <p>To check/keep updated binary and library of the initramfs, you can run <a href="libbin">libbin</a> script at the root.</p>
+   </article>
+
+</body>
