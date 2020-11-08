@@ -5,6 +5,7 @@
 <meta charset="utf-8">
 <style>
 #start {
+max-width:450px;
 background-color:#eee;
 border: 1px solid #8c8c8c;
 }
@@ -14,7 +15,6 @@ padding: 5px;
 border: 0;
 font-size: 100%;
 font: inherit;
-max-width:200px;
 display:block;
 }
 a {
@@ -53,7 +53,8 @@ margin:15px 0 35px 0;
    <header>
       <h1>Simple initramfs with luks support</h1>
    </header>
-   <article id=start>
+   <article>
+     <div id=start>
       <code>
       	<span>mkdir /usr/src/initramfs </span>
 	<span> # Basic directories structure</span>
@@ -63,6 +64,7 @@ margin:15px 0 35px 0;
 	<span>cp --parents /proc/sys/kernel/printk /usr/src/initramfs/</span>
 	<span>cp --parents /etc/fstab /usr/src/initramfs/ </span>
       </code>
+	</div>
    </article>
   
    <article>
