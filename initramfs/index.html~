@@ -108,7 +108,7 @@ margin:15px 0 35px 0;
 	   <div class=start>
 		 <code>
 		  <span>menuentry 'Gentoo' {</span>
-		   <span>insmod part_msdos</span>
+		   <span style="margin-left:10px">insmod part_msdos</span>
 		  <span> insmod crypto</span>
 		 <span>insmod cryptodisk</span>
 		 <span>insmod luks</span>
