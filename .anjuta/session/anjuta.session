@@ -1,0 +1,26 @@
+[Anjuta]
+Geometry=1226x846+418+290
+
+[File Loader]
+Files=../../index.html#4%%%../../initramfs/index.html#118
+
+[Document Manager]
+bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
+
+[Execution]
+Program arguments=%%%PATH
+Program uri=../../../../../usr/bin/firefox-bin%%%../../../firefox
+Run in terminal=2
+Working directories=../../.
+Environment variables=INFOPATH=/usr/share/gcc-data/x86_64-pc-linux-gnu/7.5.0/info:/usr/share/binutils-data/x86_64-pc-linux-gnu/2.33.1/info:/usr/share/info%%%FILE_PATH=
+
+[Debugger]
+Stop at beginning=2
+
+[Build]
+Configuration list=1:Default:%%%1:Debug:Debug%%%1:Profiling:Profiling%%%1:Optimized:Optimized
+Selected Configuration=Default
+BuildArgs/Default=--enable-maintainer-mode
+BuildArgs/Debug=--enable-maintainer-mode 'CFLAGS=-g -O0' 'CXXFLAGS=-g -O0' 'JFLAGS=-g -O0' 'FFLAGS=-g -O0'
+BuildArgs/Profiling=--enable-maintainer-mode 'CFLAGS=-g -pg' 'CXXFLAGS=-g -pg' 'JFLAGS=-g -pg' 'FFLAGS=-g -pg'
+BuildArgs/Optimized=--enable-maintainer-mode 'CFLAGS=-O2' 'CXXFLAGS=-O2' 'JFLAGS=-O2' 'FFLAGS=-O2'
