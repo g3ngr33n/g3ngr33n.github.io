@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>lightweight initramfs</title>
+<meta charset="utf-8">
+<style>
+img {
+max-width:100%;
+height:auto;
+}
+.start {
+border-radius: 4px;
+width:99%;
+background-color: #333;
+border: 1px solid #8c8c8c;
+overflow: auto;
+}
+code {
+color: white;
+margin: 0;
+padding: 7px;
+border: 0;
+font:inherit;
+display:block;
+}
+.details {
+border-radius: 4px;
+width:99%;
+background-color: #282A36;
+overflow: auto;
+}
+.details code {
+align:justify;
+color: #F8F8F2;
+margin: 0;
+padding: 7px;
+border: 0;
+font:inherit;
+display:block;
+}
+.details code span {
+border:1px solid #383940;
+}
+a {
+text-decoration:none;
+font-weight:bold;
+color:#blue;
+}
+code span {
+font-family: monospace;
+font-size: 13px;
+margin:5px 0 5px 3px;
+padding:3px;
+display:block;
+line-height:1.1;
+}
+code .comment {
+font-size: 14px;
+margin:0;
+color:#4e9a06;
+}
+.net {
+font-weight:bold;
+margin:0;
+padding:8px 0 8px 0;
+}
+.example {
+margin:15px auto 15px auto;
+padding:0;
+}
+.title {
+padding:5px;
+color:green;
+border-style:dashed;
+}
+.subtitle {
+font-size:13px;
+margin:15px 0 0 0;
+display:block;
+}
+.example img {
+border-style:solid;
+margin:15px 0 35px 0;
+}
+</style>
+</head>
+<body>
+   <header>
+      <h1>Sandbox application with Qemu</h1>
+   </header>
+   <p>Quick setting up an sandboxing using Qemu : isolation of your application inside a virtual system qemu, without libvirt with spice support mouse passtrough host <-> guest (Copy / Paste from your system to the virtual system)</p>
+   <article>
+    <h2>Account / Permission</h2>
+	   <p>Create a user / group which will run the virtual system qemu, add the qemu user into the kvm group</p>
+	    <div class=start>
+		 <code>
+		  <span>useradd qemu</span>
+		  <span>passwd qemu</span>
+		  <span>usermod -a -G kvm qemu</span>
+		  </code>
+		 </div>
+		  <p></p>Login with qemu</p>
+   </article>
+   <article>
+      <h2>Pick your system</h2>
+  	<p>Download the install image of the system of your choice</p>
+  	<p>Alpine doesn't have spice-vdagent <i>(can be build from source but must be patched for musl)</i>, I use mostly devuan as system</p>
+  	<p>Create the hard drive image for the system</p>
+  	<div class=start>
+  	<code>
+		<span>qemu-img create -f qcow2 firefox.img 20G</span>
+  	</code>
+  	</div>
+  	<p>Template of the virtual system </p>
+  	<div class=start>
+  	<code>
+		<pre>firefox.sh</pre>
+		<span>#!/bin/bash</span>
+		<span>qemu-system-x86_64 \</span>
+		<span>-machine accel=kvm,vmport=off \</span>
+		<span>-cpu Skylake-Client \</span>
+		<span>-sandbox on \</span>
+		<span>-vga qxl \</span>
+		<span>-daemonize \</span>
+		<span>-m 2048 \</span>
+		<span>-mon chardev=viewer,mode=control \</span>
+		<span>-chardev spiceport,id=viewer,name=org.qemu.monitor.qmp.0 \</span>
+		<span>-nic user,ipv6=off,model=e1000e,mac=52:54:98:76:54:32 \</span>
+		<span>-device virtio-scsi-pci -drive file=qemuimg/firefox.img,if=none,id=hd0 -device scsi-hd,drive=hd0 \</span>
+		<span>-chardev spicevmc,id=vdagent,debug=1,name=vdagent \</span>
+		<span>-device virtio-serial-pci,id=virtio-serial0,max_ports=16,bus=pci.0,addr=0x5 \</span>
+		<span>-device virtserialport,nr=1,bus=virtio-serial0.0,chardev=vdagent,name=com.redhat.spice.0 \</span>
+		<span>-spice unix,addr=/home/qemu/firefox.sock,disable-ticketing \</span>
+		<span>"$@"
+		<span>exec remote-viewer -t "Firefox" spice+unix:///home/qemu/firefox.sock</span>
+  	</code>
+  	</div>
+  	 <div class=details>
+  	<code>
+  	<span>Details of the above</p>
+  	<span>-machine accel=kvm,vmport=off: We want the kvm accelerator and disable the vmware port (default is on) </span>
+	<span>-cpu : If you are unsure here, remove this line. qemu-system-x86_64 -cpu help for the full cpu list supported</span>
+	<span>-sandbox on : Enable seccomp</span>
+	<span>-vga qxl : Recommended VGA driver for spice</span>
+	<span>-daemonize : qemu-system-x86_64 will be demonize which will allow us to run the external viewer spice</span>
+    <span>-m 2048 : ram</span>
+    <span>-mon chardev=viewer,mode=control : Enable the options Machine in the remote viewer (Pause/Reset/PowerOff)</span>
+    <span>-chardev spiceport,id=viewer...: Same as above</span>
+    <span>-nic user,ipv6=off,model=e1000e,mac=52:54:98:76:54:32 : Setup the network hardware</span>
+    <span>-device virtio-scsi-pci... : Setup the hard drive hardware</span>
+    <span>chardev spicevmc,id=vdagent,debug=1... Until com.redhat.spice.0 : For spice (this is the default settings, it work should as it is)</span>
+    <span>-spice unix,addr=/home/qemu/firefox.sock,disable-ticketing : Unix socket as connection to spice / disable-ticketing to allow connection without being authentificate</span>
+	<span>exec remote-viewer : Connection the remote viewer spice </span>
+	</code>
+	</div>
+	<p>To install your system with the install disk, you will have to temporarily  add : </p>
+	<div class=start>
+	<code>
+		<span>-cdrom pathto.iso \</span>
+		<span>-boot d \</span>
+	</code>
+	</div>
+	<p>Once the system is installed remove those.</p>
+   </article>
+   <article>
+	   <h2>That's it</h2>
+	   <p>You can create as many virtual system following those simple steps.</p>
+	   <img src="qemusandbox.png">
+   </article>
+		</code>
+	   </div>
+   </article>
+</body>
