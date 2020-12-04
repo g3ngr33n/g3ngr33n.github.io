@@ -1,0 +1,15 @@
+# Fix : https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=935896
+#!/bin/bash
+while :
+  do
+  current_size=`xrandr | sed 's/[Virtual|Screen].*//' | tr -d '\n' | awk '{print $1}'`
+  output=`xrandr --listactivemonitors | awk '{print $4}' |  tr -d '\n'`
+  saved_size=`cat /tmp/size`
+    if [ "$current_size" = "$saved_size" ]; then
+      sleep 1;
+    else
+      echo $current_size > /tmp/size
+      xrandr --output $output --auto
+      sleep 1;
+    fi
+done

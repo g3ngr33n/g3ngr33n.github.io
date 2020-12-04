@@ -1,0 +1,18 @@
+#!/bin/bash
+qemu-system-x86_64 \
+-cpu Skylake-Client \
+-machine vmport=off \
+-sandbox on \
+-vga qxl \
+-daemonize \
+-m 2048 \
+-mon chardev=viewer,mode=control \
+-device virtio-scsi-pci -drive driver=raw,file=qemuimg/tails.iso,if=none,id=cd0 -device scsi-cd,drive=cd0 \
+-device virtio-serial-pci,id=virtio-serial0,max_ports=16,bus=pci.0,addr=0x5 \
+-device virtio-net,netdev=vmnic -netdev user,id=vmnic \
+-chardev spiceport,id=viewer,name=org.qemu.monitor.qmp.0 \
+-chardev spicevmc,id=vdagent,debug=0,name=vdagent \
+-device virtserialport,nr=1,bus=virtio-serial0.0,chardev=vdagent,name=com.redhat.spice.0 \
+-spice unix,addr=/home/qemu/tails.sock,disable-ticketing \
+"$@"
+exec remote-viewer -t "Tails" spice+unix:///home/qemu/tails.sock
