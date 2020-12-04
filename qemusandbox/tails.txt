@@ -1,7 +1,7 @@
 #!/bin/bash
 qemu-system-x86_64 \
 -cpu Skylake-Client \
--machine vmport=off \
+-machine accel=kvm,vmport=off \
 -sandbox on \
 -vga qxl \
 -daemonize \
