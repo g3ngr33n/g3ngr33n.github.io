@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>lightweight initramfs</title>
+<meta charset="utf-8">
+<style>
+img {
+max-width:100%;
+height:auto;
+}
+.start {
+border-radius: 4px;
+width:99%;
+background-color: #333;
+border: 1px solid #8c8c8c;
+overflow: auto;
+}
+code {
+color: white;
+margin: 0;
+padding: 7px;
+border: 0;
+font:inherit;
+display:block;
+}
+.details {
+border-radius: 4px;
+width:99%;
+background-color: #282A36;
+overflow: auto;
+}
+.details code {
+align:justify;
+color: #F8F8F2;
+margin: 0;
+padding: 7px;
+border: 0;
+font:inherit;
+display:block;
+}
+.details code span {
+border:1px solid #383940;
+}
+a {
+text-decoration:none;
+font-weight:bold;
+color:#blue;
+}
+code span {
+font-family: monospace;
+font-size: 13px;
+margin:5px 0 5px 3px;
+padding:3px;
+display:block;
+line-height:1.1;
+}
+code .comment {
+font-size: 14px;
+margin:0;
+color:#4e9a06;
+}
+.net {
+font-weight:bold;
+margin:0;
+padding:8px 0 8px 0;
+}
+.example {
+margin:15px auto 15px auto;
+padding:0;
+}
+.title {
+padding:5px;
+color:green;
+border-style:dashed;
+}
+.subtitle {
+font-size:13px;
+margin:15px 0 0 0;
+display:block;
+}
+.example img {
+border-style:solid;
+margin:15px 0 35px 0;
+}
+</style>
+</head>
+<body>
+   <header>
+      <h1>Get ride of systemd-tmpfiles</h1>
+   </header>
+   <p>sys-apps/systemd-tmpfiles got to be --unmerge as deepclean will involve important dependency for your system</p>
+    <div class=start>
+  	<code>
+		<span>emerge --unmerge sys-apps/systemd-tmpfiles sys-apps/systemd-tmpfiles</span>
+  	</code>
+  	</div>
+   <p>Now do the same with openrc</p>
+    <div class=start>
+  	<code>
+		<span>emerge --unmerge sys-apps/openrc</span>
+  	</code>
+  	</div>
+  	<p>Now we must rebuild openrc with a custom ebuild and the following useflag enabled only : ncurses sysv-utils</p>
+  	<div class=start>
+  	<code>
+		<span>USE="ncurses sysv-utils -audit -bash -debug -netifrc -newnet -pam -prefix -selinux -unicode" emerge sys-apps/openrc</span>
+		<span>(custom ebuild if you need https://raw.githubusercontent.com/g3ngr33n/emergeless/master/sys-apps/openrc/openrc-0.43.3.ebuild)</span>
+  	</code>
+  	</div>
+  	<p>Switch the system init to "sysvinit style", (we still use the openrc syntax for our runlevel script)
+  	by replacing your /etc/inittab accordingly to your system (My <a href="inittab" title="etc/inittab">inittab</a>)
+  	</p>
+  	<code>
+		<span>That's should make the tricks</span>
+  	</code>
+</body>
