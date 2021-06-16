@@ -104,13 +104,19 @@ margin:15px 0 35px 0;
   	<div class=start>
   	<code>
 		<span>USE="ncurses sysv-utils -audit -bash -debug -netifrc -newnet -pam -prefix -selinux -unicode" emerge sys-apps/openrc</span>
-		<span>(custom ebuild if you need https://raw.githubusercontent.com/g3ngr33n/emergeless/master/sys-apps/openrc/openrc-0.43.3.ebuild)</span>
+		<span><a href="https://raw.githubusercontent.com/g3ngr33n/emergeless/master/sys-apps/openrc/openrc-0.43.3.ebuild">custom ebuild</a>
   	</code>
   	</div>
-  	<p>Switch the system init to "sysvinit style", (we still use the openrc syntax for our runlevel script)
-  	by replacing your /etc/inittab accordingly to your system (My <a href="inittab" title="etc/inittab">inittab</a>)
+  	<p>Switch the system init to "sysvinit style", we still use openrc syntax for our runlevel script, we only need to change
+ the inittab, you must set it accordingly to your system (My look like <a href="inittab.txt" title="etc/inittab">inittab</a>)
   	</p>
+     <p>Now add to your package.mask, bellow sys-apps/systemd / sys-apps/dbus </p>
+     <div class=start>
   	<code>
-		<span>That's should make the tricks</span>
+		<span>virtual/tmpfiles</span>
+		<span>sys-apps/systemd-tmpfiles</span>
   	</code>
+  	</div>
+  	<h2> Hey, it is recommand and pushed by the Gentoo team ! why not using it ?</h2>
+  	<p>I only want what a init system is made for, boot my system with the services I selected and not ending with some weird hard dependent services running from I don't known where.</p>
 </body>
