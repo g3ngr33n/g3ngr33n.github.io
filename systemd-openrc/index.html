@@ -83,11 +83,11 @@ border-style:solid;
 margin:15px 0 35px 0;
 }
 </style>
-</head>
+</head>#000000#FFFFFF#000000
 <body>
    <header>
       <h1>Get ride of systemd-tmpfiles</h1>
-   </header>
+   #000000</header>
    <p>sys-apps/systemd-tmpfiles got to be --unmerge as deepclean will involve important dependency for your system</p>
     <div class=start>
   	<code>
@@ -112,11 +112,19 @@ margin:15px 0 35px 0;
   	</p>
      <p>Now add to your package.mask, bellow sys-apps/systemd / sys-apps/dbus </p>
      <div class=start>
-  	<code>
+  	<code>		
 		<span>virtual/tmpfiles</span>
 		<span>sys-apps/systemd-tmpfiles</span>
   	</code>
   	</div>
+  	<h2> Extra ebuild </h2>
+  	<p>Here few ebuild widely used with the dependency systemd-tmpfiles removed</p>
+  	<code>
+		<span><a href="https://github.com/g3ngr33n/emergeless/tree/master/app-admin/sudo">sudo-1.9.7_p1</a> (check the build log for a --disable-tmpfiles.d)</span>
+		<span><a href="https://github.com/g3ngr33n/emergeless/tree/master/app-portage/eix">eix-0.35.2</a></span>
+		<span><a href="https://github.com/g3ngr33n/emergeless/tree/master/x11-base/xorg-server">xorg-server-1.20.11-r1</a>(this ebuild get ride of the display-manager-init dependency, another forcing from... )</a></span>
+		<p>If you have made an ebuild for another software, removing systemd-tmpfiles dependency, please let me known at gengreen@tutanota.com (you can contact too if you need a hands making one) </p>
+  	</code>
   	<h2> Hey, it is recommand and pushed by the Gentoo team ! why not using it ?</h2>
   	<p>I only want what a init system is made for, boot my system with the services I selected and not ending with some weird hard dependent services running without my consent or knownledge + probably unneeded</p>
 </body>
